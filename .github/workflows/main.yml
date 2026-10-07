@@ -1,0 +1,33 @@
+name: YouTube Shorts diario
+
+on:
+  schedule:
+    - cron: '0 13 * * *'
+  workflow_dispatch:
+
+jobs:
+  crear-short:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar proyecto
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar FFmpeg y eSpeak
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg espeak-ng
+
+      - name: Crear Short
+        run: python shorts.py
+
+      - name: Guardar video generado
+        uses: actions/upload-artifact@v4
+        with:
+          name: short-del-dia Pol
+          path: output/
